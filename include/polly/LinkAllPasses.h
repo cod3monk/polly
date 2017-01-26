@@ -36,6 +36,7 @@ llvm::Pass *createDOTPrinterPass();
 llvm::Pass *createDOTViewerPass();
 llvm::Pass *createJSONExporterPass();
 llvm::Pass *createJSONImporterPass();
+llvm::Pass *createLayerConditionPass();
 llvm::Pass *createPollyCanonicalizePass();
 llvm::Pass *createPolyhedralInfoPass();
 llvm::Pass *createScopDetectionPass();
@@ -69,6 +70,7 @@ struct PollyForcePassLinking {
     polly::createDOTOnlyPrinterPass();
     polly::createDOTOnlyViewerPass();
     polly::createDOTPrinterPass();
+    polly::createLayerConditionPass();
     polly::createDOTViewerPass();
     polly::createJSONExporterPass();
     polly::createJSONImporterPass();
@@ -94,6 +96,7 @@ void initializeCodePreparationPass(llvm::PassRegistry &);
 void initializeDeadCodeElimPass(llvm::PassRegistry &);
 void initializeJSONExporterPass(llvm::PassRegistry &);
 void initializeJSONImporterPass(llvm::PassRegistry &);
+void initializeLayerConditionPass(llvm::PassRegistry &);
 void initializeIslAstInfoPass(llvm::PassRegistry &);
 void initializeCodeGenerationPass(llvm::PassRegistry &);
 #ifdef GPU_CODEGEN

@@ -122,6 +122,10 @@ static cl::opt<bool> ExportJScop(
     cl::desc("Export the polyhedral description of the detected Scops"),
     cl::Hidden, cl::init(false), cl::ZeroOrMore, cl::cat(PollyCategory));
 
+static cl::opt<bool> LayerCondition(
+    "polly-layercondition", cl::desc("Analyzes SCoPs for layer conditions"),
+    cl::Hidden, cl::init(false), cl::ZeroOrMore, cl::cat(PollyCategory));
+
 static cl::opt<bool> DeadCodeElim("polly-run-dce",
                                   cl::desc("Run the dead code elimination"),
                                   cl::Hidden, cl::init(false), cl::ZeroOrMore,
@@ -178,6 +182,7 @@ void initializePollyPasses(PassRegistry &Registry) {
   initializeDependenceInfoWrapperPassPass(Registry);
   initializeJSONExporterPass(Registry);
   initializeJSONImporterPass(Registry);
+  initializeLayerConditionPass(Registry);
   initializeIslAstInfoPass(Registry);
   initializeIslScheduleOptimizerPass(Registry);
   initializePollyCanonicalizePass(Registry);
@@ -243,6 +248,9 @@ void registerPollyPasses(llvm::legacy::PassManagerBase &PM) {
 
   if (DeadCodeElim)
     PM.add(polly::createDeadCodeElimPass());
+  
+  if (LayerCondition)
+    PM.add(polly::createLayerConditionPass());
 
   if (Target == TARGET_GPU) {
     // GPU generation provides its own scheduling optimization strategy.
@@ -296,7 +304,7 @@ static bool shouldEnablePolly() {
     PollyTrackFailures = true;
 
   if (PollyOnlyPrinter || PollyPrinter || PollyOnlyViewer || PollyViewer ||
-      ExportJScop || ImportJScop)
+      ExportJScop || ImportJScop || LayerCondition)
     PollyEnabled = true;
 
   return PollyEnabled;
